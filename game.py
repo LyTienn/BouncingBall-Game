@@ -6,6 +6,17 @@ pygame.mixer.init()
 pygame.mixer.music.load("f6o8c11t7d.mp3") #duong dan
 pygame.mixer.music.play(-1) #replay music
 
+def draw_button(window, text, rect, color, text_color):
+    pygame.draw.rect(window, color, rect)
+    font = pygame.font.Font(None, 30)
+    text_surface = font.render(text, True, text_color)
+    text_rect = text_surface.get_rect(center = rect.center)
+    window.blit(text_surface, text_rect)
+
+button_rect = pygame.Rect(10,10,70,35)
+button_color = (0,150,0)
+button_text_color = (255,255,255)
+
 class Ball:
     def __init__(self, position, velocity):
         self.pos = np.array(position, dtype=np.float64)
@@ -58,6 +69,9 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if button_rect.collidepoint(event.pos):
+                balls = [Ball(position = [WIDTH // 2, HEIGHT // 2 - 120], velocity = [0,0])]
     start_angle += spinning_speed
     end_angle += spinning_speed
     for ball in balls:
@@ -84,6 +98,8 @@ while running:
     draw_arc(window, CIRCLE_CENTER, CIRCLE_RADIUS, start_angle, end_angle) 
     for ball in balls:
         pygame.draw.circle(window, ball.color, ball.pos, BALL_RADIUS)
+    
+    draw_button(window, "Reset", button_rect, button_color, button_text_color)
     pygame.display.flip()
     clock.tick(60)
 
